@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="StreetCarSpecial, JDM, SR20DET">
+    <meta name="description" content="Аукцион автомобилей из Японии">
+    <link rel="stylesheet" href="styles.css"/>
+    <title>Street Car Special</title>
+    <script src="app.js" defer></script>
+</head>
+<body>
+<!-- Side navigation -->
+<div class="sidenav">
+    <div class="filter">
+        <h1>Фильтры</h1>
+       <input class="find" type="text" id="find" placeholder="Название">
+    </div>
+    <div class="engine">
+        <h2>Двигатель</h2>
+     <div class="dropdown-checkbox form-group">
+      <label class="label-title">Выбрано</label>
+      <ul>
+        <li><label><input type="checkbox" name="type[]">JZ</label></li>
+        <li><label><input type="checkbox" name="type[]">2JZ</label></li>
+        <li><label><input type="checkbox" name="type[]">RB25</label></li>
+        <li><label><input type="checkbox" name="type[]">SR20DET</label></li>
+      </ul>
+    </div>
+    </div>
+    <div class="type">
+        <h2>Тип</h2>
+        <div>
+        <input type="radio" id="comfort" name="drone" value="Comfort" />
+        <label for="comfort">Комфорт</label>
+        </div>
+        <div>
+        <input type="radio" id="sport" name="drone" value="Drift" />
+        <label for="sport">Дрифт</label>
+        </div>
+        <div>
+        <input type="radio" id="sport+" name="drone" value="Drag" />
+        <label for="sport+">Драг</label>
+        </div>
+    </div>
+    <button id="reset-filters">Сбросить фильтры</button>
+  </div>
+  <div class="container">
+    <div class="first">
+        <a href="https://vk.com/scscarsbitch" target="_blank">"Street Car Special"</a>
+        <!-- <img alt="JDM" 
+        src="https://emojio.ru/images/apple-m/1f1ef-1f1f5.png"
+        class="jdm"/> -->
+    </div>
+    <div class="list-cars">
+        <div id="car-container"></div>
+        
+    </div>
+    <div class="third">
+        <p>!</p>
+    </div>
+  </div>  
+</body>
+</html>
