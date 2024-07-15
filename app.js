@@ -1,9 +1,9 @@
 const cars = [
-  { model: 'Silvia S13', engine: 'SR20DET', type: 'Drift', cost: 15000 },
-  { model: 'Toyota Supra', engine: '2JZ', type: 'Drag', cost: 23000 },
-  { model: 'Silvia S15', engine: '2JZ', type: 'Drift', cost: 25000 },
-  { model: 'Mazda MX5', engine: 'JZ', type: 'Comfort', cost: 8000 },
-  { model: 'Nissan GTR R34', engine: 'RB25', type: 'Comfort', cost: 30000 },
+  { model: 'Silvia S13', engine: 'SR20DET', type: 'Drift', cost: 15000, hp: 350 },
+  { model: 'Toyota Supra', engine: '2JZ', type: 'Drag', cost: 23000, hp: 600 },
+  { model: 'Silvia S15', engine: '2JZ', type: 'Drift', cost: 25000, hp: 650},
+  { model: 'Mazda MX5', engine: 'JZ', type: 'Comfort', cost: 8000, hp: 250},
+  { model: 'Nissan GTR R34', engine: 'RB25', type: 'Comfort', cost: 30000, hp: 500},
 ];
 
 let filteredCars = [...cars];
@@ -20,6 +20,7 @@ function renderCars() {
       <h3>${car.model}</h3>
       <p>Engine: ${car.engine}</p>
       <p>Type: ${car.type}</p>
+      <p>HP: ${car.hp}</p>
       <p>Cost: $${car.cost}</p>
       <button class="link-button" onclick="viewCarDetails('${car.model}')">→</button>
     `;
@@ -28,9 +29,7 @@ function renderCars() {
 }
 
 function viewCarDetails(model) {
-  const car = cars.find(c => c.model === model);
-  localStorage.setItem('car', JSON.stringify(car));
-  window.location.href = 'car.html';
+  window.location.href = `car.html?model=${model}`;
 }
 
 function applyFilters() {
@@ -52,6 +51,12 @@ function applyFilters() {
     filteredCars.sort((a, b) => b.cost - a.cost);
   }
 
+  if (sortOption === 'asc') {
+    filteredCars.sort((a, b) => a.hp - b.hp);
+  } else if (sortOption === 'desc') {
+    filteredCars.sort((a, b) => b.hp - a.hp);
+  }
+
   renderCars();
 }
 
@@ -70,11 +75,17 @@ document.getElementById('sort-price').addEventListener('change', (e) => {
   applyFilters();
 });
 
+document.getElementById('sort-hp').addEventListener('change', (e) => {
+  sortOption = e.target.value;
+  applyFilters();
+});
+
 document.getElementById('reset-filters').addEventListener('click', () => {
   document.getElementById('find').value = '';
   document.querySelectorAll('.dropdown-checkbox input[type="checkbox"]').forEach(checkbox => checkbox.checked = false);
   document.querySelectorAll('input[name="type"]').forEach(radio => radio.checked = false);
   document.getElementById('sort-price').value = 'none';
+  document.getElementById('sort-hp').value = 'none';
   sortOption = 'none';
   filteredCars = [...cars];
   renderCars();
