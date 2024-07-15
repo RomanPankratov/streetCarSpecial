@@ -12,52 +12,47 @@
 <body>
 <!-- Side navigation -->
 <div class="sidenav">
-    <div class="filter">
-        <h1>Фильтры</h1>
-       <input class="find" type="text" id="find" placeholder="Название">
-    </div>
-    <div class="engine">
-        <h2>Двигатель</h2>
-     <div class="dropdown-checkbox form-group">
-      <label class="label-title">Выбрано</label>
-      <ul>
-        <li><label><input type="checkbox" name="type[]">JZ</label></li>
-        <li><label><input type="checkbox" name="type[]">2JZ</label></li>
-        <li><label><input type="checkbox" name="type[]">RB25</label></li>
-        <li><label><input type="checkbox" name="type[]">SR20DET</label></li>
-      </ul>
-    </div>
-    </div>
-    <div class="type">
-        <h2>Тип</h2>
-        <div>
-        <input type="radio" id="comfort" name="drone" value="Comfort" />
-        <label for="comfort">Комфорт</label>
-        </div>
-        <div>
-        <input type="radio" id="sport" name="drone" value="Drift" />
-        <label for="sport">Дрифт</label>
-        </div>
-        <div>
-        <input type="radio" id="sport+" name="drone" value="Drag" />
-        <label for="sport+">Драг</label>
-        </div>
-    </div>
-    <button id="reset-filters">Сбросить фильтры</button>
+  <div class="filter-controls">
+      <h3>Марка</h3>
+      <input type="text" id="find" placeholder="Поиск по моделям" class="find">
+      <div class="dropdown-checkbox">
+          <h3>Двигатель</h3>
+          <span class="label-title">Выбрано 0</span>
+          <ul>
+              <li><label><input type="checkbox" value="SR20DET"> SR20DET</label></li>
+              <li><label><input type="checkbox" value="2JZ"> 2JZ</label></li>
+              <li><label><input type="checkbox" value="JZ"> JZ</label></li>
+              <li><label><input type="checkbox" value="RB25"> RB25</label></li>
+          </ul>
+      </div>
+      <div class="type">
+          <h3>Тип</h3>
+          <label><input type="radio" name="type" value="Drift"> Drift</label>
+          <label><input type="radio" name="type" value="Drag"> Drag</label>
+          <label><input type="radio" name="type" value="Comfort"> Comfort</label>
+      </div>
+      <div class="sort">
+          <label for="sort-price"><h3>Сортировать по цене:</h3></label>
+          <select id="sort-price">
+              <option value="none">Не сортировать</option>
+              <option value="asc">По возрастанию</option>
+              <option value="desc">По убыванию</option>
+          </select>
+      </div>
+      <button id="reset-filters">Сбросить фильтры</button>
   </div>
+</div>
   <div class="container">
     <div class="first">
         <a href="https://vk.com/scscarsbitch" target="_blank">"Street Car Special"</a>
-        <!-- <img alt="JDM" 
+        <img alt="JDM" 
         src="https://emojio.ru/images/apple-m/1f1ef-1f1f5.png"
-        class="jdm"/> -->
+        class="jdm"/>
     </div>
     <div class="list-cars">
-        <div id="car-container"></div>
-        
+        <div id="car-container"></div>  
     </div>
-    <div class="third">
-        <p>!</p>
+    <div class="footer">
     </div>
   </div>  
 </body>

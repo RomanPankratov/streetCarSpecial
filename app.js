@@ -1,176 +1,85 @@
-const carSpecial = [
-  { model: 'Silvia S13', engine: 'SR20DET', type: 'Drift' },
-  { model: 'Toyota Supra', engine: '2JZ', type: 'Drag' },
-  { model: 'Silvia S15', engine: '2JZ', type: 'Drift' },
-  { model: 'Mazda MX5', engine: 'JZ', type: 'Comfort' },
+const cars = [
+  { model: 'Silvia S13', engine: 'SR20DET', type: 'Drift', cost: 15000 },
+  { model: 'Toyota Supra', engine: '2JZ', type: 'Drag', cost: 23000 },
+  { model: 'Silvia S15', engine: '2JZ', type: 'Drift', cost: 25000 },
+  { model: 'Mazda MX5', engine: 'JZ', type: 'Comfort', cost: 8000 },
+  { model: 'Nissan GTR R34', engine: 'RB25', type: 'Comfort', cost: 30000 },
 ];
 
-const carContainer = document.getElementById('car-container');
+let filteredCars = [...cars];
+let sortOption = 'none';
 
-function render(arrCar = []) {
-  carContainer.innerHTML = '';
+function renderCars() {
+  const container = document.getElementById('car-container');
+  container.innerHTML = '';
 
-  arrCar.forEach(car => {
-    const carBlock = document.createElement('div');
-    carBlock.classList.add('car-block');
-
-    const modelElement = document.createElement('h3');
-    modelElement.textContent = `Model: ${car.model}`;
-
-    const engineElement = document.createElement('p');
-    engineElement.textContent = `Engine: ${car.engine}`;
-
-    const typeElement = document.createElement('p');
-    typeElement.textContent = `Type: ${car.type}`;
-
-    const linkButton = document.createElement('button');
-    linkButton.textContent = '➡'; // Стрелка для кнопки
-    linkButton.classList.add('link-button');
-    linkButton.onclick = () => {
-      saveFilters();
-      window.location.href = `car.html?model=${encodeURIComponent(car.model)}`;
-    };
-
-    carBlock.appendChild(modelElement);
-    carBlock.appendChild(engineElement);
-    carBlock.appendChild(typeElement);
-    carBlock.appendChild(linkButton);
-
-    carContainer.appendChild(carBlock);
+  filteredCars.forEach(car => {
+    const carElement = document.createElement('div');
+    carElement.className = 'car-block';
+    carElement.innerHTML = `
+      <h3>${car.model}</h3>
+      <p>Engine: ${car.engine}</p>
+      <p>Type: ${car.type}</p>
+      <p>Cost: $${car.cost}</p>
+      <button class="link-button" onclick="viewCarDetails('${car.model}')">→</button>
+    `;
+    container.appendChild(carElement);
   });
 }
 
-function countSelectedCheckboxes() {
-  const checkboxes = document.querySelectorAll('.dropdown-checkbox input[type="checkbox"]');
-  let selectedCount = 0;
-
-  checkboxes.forEach(checkbox => {
-    if (checkbox.checked) {
-      selectedCount++;
-    }
-  });
-
-  const labelTitle = document.querySelector('.dropdown-checkbox .label-title');
-  labelTitle.textContent = `Выбрано ${selectedCount}`;
+function viewCarDetails(model) {
+  const car = cars.find(c => c.model === model);
+  localStorage.setItem('car', JSON.stringify(car));
+  window.location.href = 'car.html';
 }
 
-function getFilteredCars() {
-  const searchValue = document.getElementById('find').value.toLowerCase();
-  const checkboxes = document.querySelectorAll('.dropdown-checkbox input[type="checkbox"]');
-  const selectedEngines = [];
+function applyFilters() {
+  const searchQuery = document.getElementById('find').value.toLowerCase();
+  const selectedEngine = Array.from(document.querySelectorAll('.dropdown-checkbox input[type="checkbox"]:checked')).map(cb => cb.value);
+  const selectedType = document.querySelector('input[name="type"]:checked')?.value;
 
-  checkboxes.forEach(checkbox => {
-    if (checkbox.checked) {
-      selectedEngines.push(checkbox.parentElement.textContent.trim().toLowerCase());
-    }
+  filteredCars = cars.filter(car => {
+    return (
+      (!searchQuery || car.model.toLowerCase().includes(searchQuery)) &&
+      (!selectedEngine.length || selectedEngine.includes(car.engine)) &&
+      (!selectedType || car.type === selectedType)
+    );
   });
 
-  const radioButtons = document.querySelectorAll('.type input[type="radio"]');
-  let selectedType = '';
-
-  radioButtons.forEach(radio => {
-    if (radio.checked) {
-      selectedType = radio.value.toLowerCase();
-    }
-  });
-
-  const filteredCars = carSpecial.filter(car => {
-    const matchesSearch = car.model.toLowerCase().includes(searchValue);
-    const matchesEngine = selectedEngines.length === 0 || selectedEngines.includes(car.engine.toLowerCase());
-    const matchesType = selectedType === '' || car.type.toLowerCase() === selectedType;
-
-    return matchesSearch && matchesEngine && matchesType;
-  });
-
-  render(filteredCars);
-}
-
-function saveFilters() {
-  const searchValue = document.getElementById('find').value;
-  const checkboxes = document.querySelectorAll('.dropdown-checkbox input[type="checkbox"]');
-  const radioButtons = document.querySelectorAll('.type input[type="radio"]');
-
-  const selectedFilters = {
-    search: searchValue,
-    engines: [],
-    type: '',
-  };
-
-  checkboxes.forEach(checkbox => {
-    if (checkbox.checked) {
-      selectedFilters.engines.push(checkbox.parentElement.textContent.trim());
-    }
-  });
-
-  radioButtons.forEach(radio => {
-    if (radio.checked) {
-      selectedFilters.type = radio.value;
-    }
-  });
-
-  localStorage.setItem('filters', JSON.stringify(selectedFilters));
-}
-
-function loadFilters() {
-  const savedFilters = JSON.parse(localStorage.getItem('filters'));
-
-  if (savedFilters) {
-    document.getElementById('find').value = savedFilters.search;
-
-    const checkboxes = document.querySelectorAll('.dropdown-checkbox input[type="checkbox"]');
-    checkboxes.forEach(checkbox => {
-      if (savedFilters.engines.includes(checkbox.parentElement.textContent.trim())) {
-        checkbox.checked = true;
-      }
-    });
-
-    const radioButtons = document.querySelectorAll('.type input[type="radio"]');
-    radioButtons.forEach(radio => {
-      if (radio.value === savedFilters.type) {
-        radio.checked = true;
-      }
-    });
-
-    countSelectedCheckboxes();
+  if (sortOption === 'asc') {
+    filteredCars.sort((a, b) => a.cost - b.cost);
+  } else if (sortOption === 'desc') {
+    filteredCars.sort((a, b) => b.cost - a.cost);
   }
 
-  getFilteredCars(); // вызов для обновления списка машин после загрузки фильтров
+  renderCars();
 }
 
-function resetFilters() {
+document.getElementById('find').addEventListener('input', applyFilters);
+
+document.querySelectorAll('.dropdown-checkbox input[type="checkbox"]').forEach(checkbox => {
+  checkbox.addEventListener('change', applyFilters);
+});
+
+document.querySelectorAll('input[name="type"]').forEach(radio => {
+  radio.addEventListener('change', applyFilters);
+});
+
+document.getElementById('sort-price').addEventListener('change', (e) => {
+  sortOption = e.target.value;
+  applyFilters();
+});
+
+document.getElementById('reset-filters').addEventListener('click', () => {
   document.getElementById('find').value = '';
-  const checkboxes = document.querySelectorAll('.dropdown-checkbox input[type="checkbox"]');
-  const radioButtons = document.querySelectorAll('.type input[type="radio"]');
-
-  checkboxes.forEach(checkbox => {
-    checkbox.checked = false;
-  });
-
-  radioButtons.forEach(radio => {
-    radio.checked = false;
-  });
-
-  localStorage.removeItem('filters');
-  countSelectedCheckboxes();
-  getFilteredCars();
-}
-
-document.getElementById('find').addEventListener('input', getFilteredCars);
-
-const checkboxes = document.querySelectorAll('.dropdown-checkbox input[type="checkbox"]');
-checkboxes.forEach(checkbox => {
-  checkbox.addEventListener('change', () => {
-    countSelectedCheckboxes();
-    getFilteredCars();
-  });
+  document.querySelectorAll('.dropdown-checkbox input[type="checkbox"]').forEach(checkbox => checkbox.checked = false);
+  document.querySelectorAll('input[name="type"]').forEach(radio => radio.checked = false);
+  document.getElementById('sort-price').value = 'none';
+  sortOption = 'none';
+  filteredCars = [...cars];
+  renderCars();
 });
 
-const radioButtons = document.querySelectorAll('.type input[type="radio"]');
-radioButtons.forEach(radio => {
-  radio.addEventListener('change', getFilteredCars);
-});
-
-document.getElementById('reset-filters').addEventListener('click', resetFilters);
-
-// Load filters and initial render of all cars
-loadFilters();
+window.onload = () => {
+  renderCars();
+};

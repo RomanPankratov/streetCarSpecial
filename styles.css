@@ -37,9 +37,6 @@ body{
     color: blue;
 }
 
-/* .list-cars{
-    background-color: whitesmoke;
-} */
 .car-block {
     border-bottom: 1px solid #ccc;
     padding: 20px;
@@ -50,90 +47,83 @@ body{
 }
 
   /* The sidebar menu */
+/* The sidebar menu */
 .sidenav {
     height: 100%; /* Full-height: remove this if you want "auto" height */
-    width: 300px; /* Set the width of the sidebar */
+    width: 400px; /* Set the width of the sidebar */
     position: fixed; /* Fixed Sidebar (stay in place on scroll) */
     z-index: 1; /* Stay on top */
     top: 0; /* Stay at the top */
-    left:1;
     right: 0;
-    background-color: #ffffff; /* Black */
+    background-color: #ffffff; /* White */
     overflow-x: hidden; /* Disable horizontal scroll */
     padding-top: 20px;
     border-left: 2px solid #818181;
-    
-}
-.filter {
-    padding: 6px 8px 6px 16px;
-    text-decoration: none;
-    color: #000;
-    display: block;
-    font-size: 14px;
-    margin-bottom: 20px;
-}
-.engine {
-    padding: 6px 8px 6px 16px;
-    text-decoration: none;
-    color: #000;
-    display: block;
-    font-size: 14px;
-    margin-bottom: 20px;
-}
-.dropdown-checkbox{
-    position:relative;
-    display:inline-block
-  }
-  
-  .dropdown-checkbox .label-title{
-    font-size:14px;
-    
-  }
-  .dropdown-checkbox ul{
-      position: absolute;
-      background: #ffffff;
-      list-style: none;
-      min-width: 180px;
-      margin: 0px;
-      padding:0px;
-      left:0px;
-      display:none;
-      z-index:1;
-  }
-  .dropdown-checkbox ul li{
-      font-size: 14px;
-      padding: 10px;
-      margin: 0px;
-  }
-  .dropdown-checkbox ul li input{
-    margin-right:10px;
-  }
-  
-  .dropdown-checkbox:hover ul{
-    display:block
-  }
-.type {
-    padding: 140px 8px 6px 16px;
-    text-decoration: none;
-    color: #000;
-    display: block; 
-    font-size: 14px;
-    margin-bottom: 20px;
-}
-.type div {
-    margin-bottom: 20px;
-    font-size: 16px;
+    padding-left: 20px; /* Add some padding for better layout */
+    padding-right: 20px;
 }
 
-.find{
-    color: #818181;
-    border: none; 
-    border-bottom: 1px solid #ccc;
-    background: #ffffff;
-    outline: none;
-    height: 24px; 
-    width: 220px;  
+.filter-controls {
+    display: flex;
+    flex-direction: column;
+}
+
+.filter-controls > * {
+    margin-bottom: 20px;
+}
+
+.filter-controls input[type="text"] {
+    padding: 6px;
     font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.filter-controls .dropdown-checkbox .label-title {
+    font-size: 14px;
+}
+
+.filter-controls .dropdown-checkbox ul {
+    position: relative;
+    background: #ffffff;
+    list-style: none;
+    margin: 0;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    display: block;
+}
+
+.filter-controls .dropdown-checkbox ul li {
+    font-size: 14px;
+    padding: 5px 0;
+}
+
+.filter-controls .type {
+    display: flex;
+    flex-direction: column;
+}
+
+.filter-controls .type label {
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.filter-controls .sort {
+    display: flex;
+    flex-direction: column;
+}
+
+.filter-controls .sort label {
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.filter-controls .sort select {
+    padding: 6px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
 #reset-filters {
@@ -146,8 +136,6 @@ body{
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    margin-left: 40px;
-    margin-top: 20px; /* Добавлено для отступа сверху */
 }
 
 #reset-filters:hover {
@@ -160,6 +148,10 @@ body{
 
 /* On smaller screens, where height is less than 450px, change the style of the sidebar (less padding and a smaller font size) */
 @media screen and (max-height: 450px) {
-    .sidenav {padding-top: 15px;}
-    .sidenav a {font-size: 18px;}
+    .sidenav {
+        padding-top: 15px;
+    }
+    .sidenav a {
+        font-size: 18px;
+    }
 }
