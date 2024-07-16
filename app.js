@@ -8,24 +8,40 @@ const cars = [
 
 let filteredCars = [...cars];
 let sortOption = 'none';
+let currentPage = 1;
+const itemsPerPage = 3;
 
 function renderCars() {
   const container = document.getElementById('car-container');
   container.innerHTML = '';
 
-  filteredCars.forEach(car => {
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const carsToDisplay = filteredCars.slice(startIndex, endIndex);
+
+  carsToDisplay.forEach(car => {
     const carElement = document.createElement('div');
     carElement.className = 'car-block';
     carElement.innerHTML = `
-      <h3>${car.model}</h3>
-      <p>Engine: ${car.engine}</p>
-      <p>Type: ${car.type}</p>
-      <p>HP: ${car.hp}</p>
-      <p>Cost: $${car.cost}</p>
-      <button class="link-button" onclick="viewCarDetails('${car.model}')">→</button>
+      <div class="car-header">
+        <h3>${car.model}</h3>
+        <button class="link-button" onclick="viewCarDetails('${car.model}')">→</button>
+      </div>
+      <div class="car-details">
+        <div class="car-details-left">
+          <p><strong>Engine:</strong> ${car.engine}</p>
+          <p><strong>HP:</strong> ${car.hp}</p>
+        </div>
+        <div class="car-details-right">
+          <p><strong>Type:</strong> ${car.type}</p>
+          <p><strong>Cost:</strong> $${car.cost}</p>
+        </div>
+      </div>
     `;
     container.appendChild(carElement);
   });
+
+  updatePagination();
 }
 
 function viewCarDetails(model) {
@@ -57,7 +73,16 @@ function applyFilters() {
     filteredCars.sort((a, b) => b.hp - a.hp);
   }
 
+  currentPage = 1;
   renderCars();
+}
+
+function updatePagination() {
+  const totalPages = Math.ceil(filteredCars.length / itemsPerPage);
+  document.getElementById('page-info').textContent = `${currentPage}`;
+  
+  document.getElementById('prev-page').disabled = currentPage === 1;
+  document.getElementById('next-page').disabled = currentPage === totalPages;
 }
 
 document.getElementById('find').addEventListener('input', applyFilters);
@@ -88,7 +113,23 @@ document.getElementById('reset-filters').addEventListener('click', () => {
   document.getElementById('sort-hp').value = 'none';
   sortOption = 'none';
   filteredCars = [...cars];
+  currentPage = 1;
   renderCars();
+});
+
+document.getElementById('prev-page').addEventListener('click', () => {
+  if (currentPage > 1) {
+    currentPage--;
+    renderCars();
+  }
+});
+
+document.getElementById('next-page').addEventListener('click', () => {
+  const totalPages = Math.ceil(filteredCars.length / itemsPerPage);
+  if (currentPage < totalPages) {
+    currentPage++;
+    renderCars();
+  }
 });
 
 window.onload = () => {
