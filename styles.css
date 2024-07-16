@@ -3,11 +3,6 @@
 body{
     background-color: #ffffff;
     color: #0f141e;
-
-    /* font-size: 16px;
-    font-weight: normal;
-    font-family: 'Roboto', sans-serif; */
-
     font: normal 16px 'Roboto', sans-serif;
     margin-right: 160px; /* Same as the width of the sidebar */
     padding: 0px 10px;
@@ -154,4 +149,19 @@ body{
     .sidenav a {
         font-size: 18px;
     }
+}
+
+.link-button {
+    background-color: #cac6c6;
+    color: #000;
+    border: 1px solid #000;
+    padding: 10px 20px;
+    font-size: 10px;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.link-button:hover{
+    opacity: 75%;
 }
