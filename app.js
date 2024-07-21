@@ -10,11 +10,10 @@ let filteredCars = [...cars];
 let sortOption = 'none';
 let currentPage = 1;
 const itemsPerPage = 3;
+const container = document.getElementById('car-container');
 
 function renderCars() {
-  const container = document.getElementById('car-container');
   container.innerHTML = '';
-
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const carsToDisplay = filteredCars.slice(startIndex, endIndex);
@@ -40,7 +39,7 @@ function renderCars() {
     `;
     container.appendChild(carElement);
   });
-
+  countSelectedCheckboxes()
   updatePagination();
 }
 
@@ -74,6 +73,7 @@ function applyFilters() {
   }
 
   currentPage = 1;
+  countSelectedCheckboxes()
   renderCars();
 }
 
@@ -90,6 +90,20 @@ document.getElementById('find').addEventListener('input', applyFilters);
 document.querySelectorAll('.dropdown-checkbox input[type="checkbox"]').forEach(checkbox => {
   checkbox.addEventListener('change', applyFilters);
 });
+
+function countSelectedCheckboxes() {
+  const checkboxes = document.querySelectorAll('.dropdown-checkbox input[type="checkbox"]');
+  let selectedCount = 0;
+
+  checkboxes.forEach(checkbox => {
+    if (checkbox.checked) {
+      selectedCount++;
+    }
+  });
+
+  const labelTitle = document.querySelector('.dropdown-checkbox .label-title');
+  labelTitle.textContent = `Выбрано ${selectedCount}`;
+}
 
 document.querySelectorAll('input[name="type"]').forEach(radio => {
   radio.addEventListener('change', applyFilters);
