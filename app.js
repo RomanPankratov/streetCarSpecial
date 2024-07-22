@@ -7,7 +7,6 @@ const cars = [
 ];
 
 let filteredCars = [...cars];
-let sortOption = 'none';
 let currentPage = 1;
 const itemsPerPage = 3;
 const container = document.getElementById('car-container');
@@ -39,7 +38,7 @@ function renderCars() {
     `;
     container.appendChild(carElement);
   });
-  countSelectedCheckboxes()
+  countSelectedCheckboxes();
   updatePagination();
 }
 
@@ -51,6 +50,7 @@ function applyFilters() {
   const searchQuery = document.getElementById('find').value.toLowerCase();
   const selectedEngine = Array.from(document.querySelectorAll('.dropdown-checkbox input[type="checkbox"]:checked')).map(cb => cb.value);
   const selectedType = document.querySelector('input[name="type"]:checked')?.value;
+  const sortSetting = document.getElementById('sort-price').value;
 
   filteredCars = cars.filter(car => {
     return (
@@ -59,21 +59,13 @@ function applyFilters() {
       (!selectedType || car.type === selectedType)
     );
   });
-
-  if (sortOption === 'asc') {
+  if (sortSetting === 'asc') {
     filteredCars.sort((a, b) => a.cost - b.cost);
-  } else if (sortOption === 'desc') {
+  } else if (sortSetting === 'desc') {
     filteredCars.sort((a, b) => b.cost - a.cost);
   }
-
-  if (sortOption === 'asc') {
-    filteredCars.sort((a, b) => a.hp - b.hp);
-  } else if (sortOption === 'desc') {
-    filteredCars.sort((a, b) => b.hp - a.hp);
-  }
-
   currentPage = 1;
-  countSelectedCheckboxes()
+  countSelectedCheckboxes();
   renderCars();
 }
 
@@ -105,17 +97,26 @@ function countSelectedCheckboxes() {
   labelTitle.textContent = `Выбрано ${selectedCount}`;
 }
 
+function allowUncheck(e) {
+  if (this.previous) {
+    this.checked = false;
+  }
+  document.querySelectorAll(
+      `input[type=radio][name=${this.name}]`).forEach((elem) => {
+    elem.previous = elem.checked;
+    applyFilters();
+    renderCars();
+  });
+}
+
 document.querySelectorAll('input[name="type"]').forEach(radio => {
   radio.addEventListener('change', applyFilters);
+  radio.addEventListener('click', allowUncheck);
+  //only needed if elem can be pre-checked
+  radio.previous = radio.checked;
 });
 
 document.getElementById('sort-price').addEventListener('change', (e) => {
-  sortOption = e.target.value;
-  applyFilters();
-});
-
-document.getElementById('sort-hp').addEventListener('change', (e) => {
-  sortOption = e.target.value;
   applyFilters();
 });
 
@@ -124,7 +125,6 @@ document.getElementById('reset-filters').addEventListener('click', () => {
   document.querySelectorAll('.dropdown-checkbox input[type="checkbox"]').forEach(checkbox => checkbox.checked = false);
   document.querySelectorAll('input[name="type"]').forEach(radio => radio.checked = false);
   document.getElementById('sort-price').value = 'none';
-  document.getElementById('sort-hp').value = 'none';
   sortOption = 'none';
   filteredCars = [...cars];
   currentPage = 1;
@@ -148,4 +148,5 @@ document.getElementById('next-page').addEventListener('click', () => {
 
 window.onload = () => {
   renderCars();
+  applyFilters();
 };
